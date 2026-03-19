@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginForm) {
         loginForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            const emailInput = document.getElementById("loginEmail").value.trim();
-            const passwordInput = document.getElementById("loginPassword").value.trim();
+            const emailInput = (document.getElementById("loginEmail")?.value || "").trim();
+            const passwordInput = (document.getElementById("loginPassword")?.value || "").trim();
 
             loginToServer(emailInput, passwordInput);
         });
@@ -673,7 +673,11 @@ function updateEnrollmentChart() {
     enrollmentChart.update();
 }
 
-const API_BASE = "/api"; // التغيير هنا ليعمل على الإنترنت ومحلياً بدون مشاكل
+// تحديد مسار الـ API بناءً على طريقة تشغيل الموقع لضمان عمله في كل الحالات
+let API_BASE = "/api";
+if (window.location.protocol === "file:" || (window.location.hostname === "127.0.0.1" && window.location.port !== "3000")) {
+    API_BASE = "http://localhost:3000/api";
+}
 
 // Global UI Data Arrays
 let studentsData = [];
@@ -3605,25 +3609,28 @@ document.getElementById('addAccountingForm')?.addEventListener('submit', async (
 // ==========================================
 // Database Management (Export / Import)
 // ==========================================
-function exportDatabase() {
-    const data = localStorage.getItem(DB_KEY);
-    if (!data) {
-        alert("لا توجد بيانات لتصديرها.");
-        return;
+async function exportDatabase() {
+    try {
+        const response = await fetch(`${API_BASE}/data`);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        
+        const date = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()).replace(/\//g, '-');
+        a.href = url;
+        a.download = `panda_database_${date}.json`; // اسم الملف الذي سيتم تحميله
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (e) {
+        alert("حدث خطأ أثناء تصدير البيانات.");
+        console.error(e);
     }
-    
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    
-    const date = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()).replace(/\//g, '-');
-    a.href = url;
-    a.download = `panda_database_${date}.json`; // اسم الملف الذي سيتم تحميله
-    
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
 }
 
 function importDatabase(event) {
@@ -3631,16 +3638,24 @@ function importDatabase(event) {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = async function(e) {
         try {
             const importedData = JSON.parse(e.target.result);
             
             // التأكد من أن الملف هو بالفعل قاعدة بيانات النظام
             if (importedData && importedData.students && importedData.roles) {
                 if (confirm("تحذير: سيتم مسح البيانات الحالية واستبدالها بالبيانات المستوردة. هل أنت متأكد من رغبتك بالاستمرار؟")) {
-                    localStorage.setItem(DB_KEY, JSON.stringify(importedData));
-                    alert("تم استعادة قاعدة البيانات بنجاح! سيتم تحديث الصفحة لتطبيق التغييرات.");
-                    window.location.reload();
+                    const response = await fetch(`${API_BASE}/data/import`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(importedData)
+                    });
+                    if (response.ok) {
+                        alert("تم استعادة قاعدة البيانات بنجاح! سيتم تحديث الصفحة لتطبيق التغييرات.");
+                        window.location.reload();
+                    } else {
+                        alert("فشل استيراد قاعدة البيانات.");
+                    }
                 }
             } else {
                 alert("ملف قاعدة البيانات غير صالح أو معطوب.");

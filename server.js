@@ -43,17 +43,22 @@ let cachedDB = null;
 async function getDB() {
     if (cachedDB) return cachedDB;
     
-    const db = await dbPromise;
-    const row = await db.get(`SELECT data FROM app_database WHERE id = 'main'`);
+    try {
+        const db = await dbPromise;
+        const row = await db.get(`SELECT data FROM app_database WHERE id = 'main'`);
+            
+        if (!row || !row.data) {
+            cachedDB = defaultData;
+            await saveDB(defaultData);
+            return defaultData;
+        }
         
-    if (!row || !row.data) {
-        cachedDB = defaultData;
-        await saveDB(defaultData);
+        cachedDB = JSON.parse(row.data);
+        return cachedDB;
+    } catch (e) {
+        console.error("خطأ في قراءة قاعدة البيانات:", e);
         return defaultData;
     }
-    
-    cachedDB = JSON.parse(row.data);
-    return cachedDB;
 }
 
 // دالة حفظ قاعدة البيانات إلى SQLite
@@ -74,15 +79,22 @@ async function saveDB(data) {
 
 // 1. تسجيل الدخول
 app.post('/api/login', async (req, res) => {
-    const db = await getDB();
-    const { identifier, password } = req.body;
-    const user = db.roles.find(u => u.email === identifier || u.name === identifier || u.roleCode === identifier);
-    if (user && user.password === password) {
-        const safeUser = { ...user };
-        delete safeUser.password;
-        return res.json({ success: true, user: safeUser });
+    try {
+        const db = await getDB();
+        const { identifier, password } = req.body;
+        
+        const roles = db.roles || db.users || [];
+        const user = roles.find(u => u.email === identifier || u.name === identifier || u.roleCode === identifier);
+        if (user && user.password === password) {
+            const safeUser = { ...user };
+            delete safeUser.password;
+            return res.json({ success: true, user: safeUser });
+        }
+        res.status(401).json({ error: "بيانات الدخول غير صحيحة" });
+    } catch (error) {
+        console.error("خطأ في الخادم أثناء تسجيل الدخول:", error);
+        res.status(500).json({ error: "حدث خطأ داخلي في الخادم" });
     }
-    res.status(401).json({ error: "بيانات الدخول غير صحيحة" });
 });
 
 // 2. جلب وتصدير كافة البيانات
