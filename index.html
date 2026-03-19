@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة مركز الباندا </title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+
+<body class="app-hidden">
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="login-overlay active">
+        <div class="login-container">
+            <div class="login-left">
+                <div class="glass-orb orb-1"></div>
+                <div class="glass-orb orb-2"></div>
+                <div class="glass-orb orb-3"></div>
+                <div class="login-brand">
+                    <i class='bx bxs-graduation'></i>
+                    <h2>مركز الباندا</h2>
+                    <p>نظام الإدارة التعليمية المتكامل</p>
+                </div>
+            </div>
+            <div class="login-right">
+                <div class="login-form-wrapper">
+                    <h3>تسجيل الدخول</h3>
+                    <p class="login-subtitle">مرحباً بعودتك! يرجى إدخال بياناتك للمتابعة.</p>
+                    <form id="loginForm">
+                        <div class="form-group custom-input-group">
+                            <label>البريد الإلكتروني أو الرمز</label>
+                            <div class="input-with-icon">
+                                <i class='bx bx-user'></i>
+                                <input type="text" id="loginEmail" class="form-input" placeholder="أدخل البريد أو الرمز"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group custom-input-group mt-4">
+                            <label>كلمة المرور</label>
+                            <div class="input-with-icon">
+                                <i class='bx bx-lock-alt'></i>
+                                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••"
+                                    required>
+                            </div>
+                        </div>
+                        <div id="loginError" class="login-error-msg">البيانات غير صحيحة، يرجى المحاولة مرة أخرى.</div>
+                        <button type="submit" class="btn btn-primary btn-block login-btn mt-4">
+                            دخول النظام <i class='bx bx-left-arrow-alt' style="margin-right: 8px; font-size: 20px;"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo" onclick="navigateTo('dashboard')" style="cursor: pointer;">
+                <img id="sidebar-logo-img" src="" alt="Logo"
+                    style="display:none; width:30px; height:30px; border-radius:4px; margin-left:10px;">
+                <i class='bx bxs-graduation' id="sidebar-logo-icon"></i>
+                <span id="sidebar-logo-text">مركز الباندا </span>
+            </div>
+            <button class="toggle-btn" id="toggle-btn"><i class='bx bx-menu'></i></button>
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a href="#" class="active" data-target="dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">لوحة التحكم</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="dashboard">لوحة التحكم</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="students">
+                    <i class='bx bx-user'></i>
+                    <span class="link-name">الطلاب</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="students">الطلاب</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="instructors">
+                    <i class='bx bx-chalkboard'></i>
+                    <span class="link-name">المدرسون</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="instructors">المدرسون</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="courses">
+                    <i class='bx bx-book-open'></i>
+                    <span class="link-name">الدورات التدريبية</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="courses">الدورات</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="class-management">
+                    <i class='bx bx-sitemap'></i>
+                    <span class="link-name">إدارة الشعب</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="class-management">إدارة الشعب</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="subjects">
+                    <i class='bx bx-book'></i>
+                    <span class="link-name">المواد الدراسية</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="subjects">المواد الدراسية</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="accounting">
+                    <i class='bx bx-wallet'></i>
+                    <span class="link-name">المالية</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="accounting">المالية</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="notifications">
+                    <i class='bx bx-bell'></i>
+                    <span class="link-name">الإشعارات</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="notifications">الإشعارات</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" data-target="settings">
+                    <i class='bx bx-cog'></i>
+                    <span class="link-name">الإعدادات</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="settings">الإعدادات</a></li>
+                </ul>
+            </li>
+            <li id="nav-roles">
+                <a href="#" data-target="roles">
+                    <i class='bx bx-shield-quarter'></i>
+                    <span class="link-name">إدارة الصلاحيات</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#" data-target="roles">إدارة الصلاحيات</a></li>
+                </ul>
+            </li>
+
+            <!-- Teacher specific -->
+            <li>
+                <a href="#" data-target="teacher-dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">لوحة المعلم</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="teacher-students">
+                    <i class='bx bx-group'></i>
+                    <span class="link-name">طلابي</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="teacher-attendance">
+                    <i class='bx bx-calendar-check'></i>
+                    <span class="link-name">الحضور والغياب</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="teacher-notifications">
+                    <i class='bx bx-broadcast'></i>
+                    <span class="link-name">إرسال إشعارات</span>
+                </a>
+            </li>
+
+            <!-- Parent specific -->
+            <li>
+                <a href="#" data-target="parent-dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">لوحة ولي الأمر</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="parent-children">
+                    <i class='bx bx-face'></i>
+                    <span class="link-name">أبنائي</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="parent-fees">
+                    <i class='bx bx-wallet'></i>
+                    <span class="link-name">الرسوم</span>
+                </a>
+            </li>
+
+            <!-- Accountant specific -->
+            <li>
+                <a href="#" data-target="accountant-dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">لوحة المحاسب</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="accountant-fees">
+                    <i class='bx bx-wallet'></i>
+                    <span class="link-name">إدارة الرسوم</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-target="accountant-reports">
+                    <i class='bx bx-line-chart'></i>
+                    <span class="link-name">التقارير المالية</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="profile-details">
+            <div class="profile-content">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff" alt="profileImg">
+            </div>
+            <div class="name-job">
+                <div class="profile_name">أحمد محمد</div>
+                <div class="job">المدير العام</div>
+            </div>
+            <i class='bx bx-log-out'></i>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+
+        <!-- Header -->
+        <header class="topbar">
+            <div class="search-box">
+                <i class='bx bx-search'></i>
+                <input type="text" placeholder="ابحث هنا...">
+            </div>
+            <div class="topbar-actions">
+                <button class="icon-btn theme-toggle" id="theme-toggle">
+                    <i class='bx bx-moon'></i>
+                </button>
+                <div class="notification-box drop-container">
+                    <button class="icon-btn" id="notif-btn">
+                        <i class='bx bx-bell'></i>
+                        <span class="badge" id="notif-badge">0</span>
+                    </button>
+                    <div class="dropdown-menu" id="notif-dropdown">
+                        <div class="dropdown-header">آخر الإشعارات</div>
+                        <div class="dropdown-content" id="notif-list">
+                            <!-- Populated by JS -->
+                            <div class="dropdown-item text-center">لا توجد إشعارات جديدة</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Pages Container -->
+        <div class="pages-container">
+
+            <!-- Dashboard View -->
+            <section id="dashboard" class="page-view active">
+                <div class="page-header">
+                    <h2>ملخص النظام</h2>
+                    <p>نظرة عامة على أداء المعهد لليوم</p>
+                </div>
+
+                <!-- Stat Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card" onclick="navigateTo('accounting')" style="cursor: pointer;">
+                        <div class="stat-icon danger"><i class='bx bx-wallet'></i></div>
+                        <div class="stat-info">
+                            <h3 id="monthly-revenue-stat">0 دينار</h3>
+                            <span>إيرادات الشهر</span>
+                        </div>
+                        <div class="stat-trend positive"><i class='bx bx-up-arrow-alt'></i> 8% </div>
+                    </div>
+
+                    <div class="stat-card" onclick="navigateTo('students')" style="cursor: pointer;">
+                        <div class="stat-icon primary"><i class='bx bx-user'></i></div>
+                        <div class="stat-info">
+                            <h3 id="total-students-stat">0</h3>
+                            <span>إجمالي الطلاب</span>
+                        </div>
+                        <div class="stat-trend positive"><i class='bx bx-up-arrow-alt'></i> 12% </div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('instructors')" style="cursor: pointer;">
+                        <div class="stat-icon secondary"><i class='bx bx-chalkboard'></i></div>
+                        <div class="stat-info">
+                            <h3 id="total-instructors-stat">0</h3>
+                            <span>عدد المدرسين</span>
+                        </div>
+                        <div class="stat-trend neutral"><i class='bx bx-minus'></i> 0% </div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('courses')" style="cursor: pointer;">
+                        <div class="stat-icon warning"><i class='bx bx-book-open'></i></div>
+                        <div class="stat-info">
+                            <h3 id="total-courses-stat">0</h3>
+                            <span>الدورات الحالية</span>
+                        </div>
+                        <div class="stat-trend positive"><i class='bx bx-up-arrow-alt'></i> 4% </div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('accounting')" style="cursor: pointer;">
+                        <div class="stat-icon danger"><i class='bx bx-wallet'></i></div>
+                        <div class="stat-info">
+                            <h3 id="monthly-revenue-stat">0 دينار</h3>
+                            <span>إيرادات الشهر</span>
+                        </div>
+                        <div class="stat-trend positive"><i class='bx bx-up-arrow-alt'></i> 8% </div>
+                    </div>
+                </div>
+
+                <!-- كروت الاشتراكات الدورية (إنترنت ومولد) -->
+                <div class="dashboard-grid mb-4">
+                    <!-- كارت اشتراك الإنترنت -->
+                    <div class="card" style="cursor: pointer; transition: transform 0.2s; border: 1px solid transparent;" onclick="openSubscriptionModal('اشتراك الانترنت')" onmouseover="this.style.transform='scale(1.02)'; this.style.borderColor='var(--primary-color)';" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='transparent';">
+                        <div class="card-header d-flex justify-between align-center">
+                            <div class="d-flex align-center gap-2">
+                                <i class='bx bx-wifi' style="font-size: 24px; color: var(--primary-color);"></i>
+                                <h3>اشتراك الإنترنت</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                                    <span style="color: var(--text-muted); font-weight: 600;">تاريخ الاشتراك</span>
+                                    <span id="net-sub-date" style="font-weight: bold; color: var(--text-main);">-</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                                    <span style="color: var(--text-muted); font-weight: 600;">تاريخ الاستحقاق</span>
+                                    <span id="net-sub-due" style="font-weight: bold; color: var(--danger-color);">-</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-muted); font-weight: 600;">مقدار الاشتراك</span>
+                                    <span id="net-sub-amount" style="font-weight: bold; color: var(--text-main);">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- كارت اشتراك المولد -->
+                    <div class="card" style="cursor: pointer; transition: transform 0.2s; border: 1px solid transparent;" onclick="openSubscriptionModal('اشتراك المولد')" onmouseover="this.style.transform='scale(1.02)'; this.style.borderColor='#f59e0b';" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='transparent';">
+                        <div class="card-header d-flex justify-between align-center">
+                            <div class="d-flex align-center gap-2">
+                                <i class='bx bx-plug' style="font-size: 24px; color: #f59e0b;"></i>
+                                <h3>اشتراك المولد</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                                    <span style="color: var(--text-muted); font-weight: 600;">تاريخ الاشتراك</span>
+                                    <span id="gen-sub-date" style="font-weight: bold; color: var(--text-main);">-</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                                    <span style="color: var(--text-muted); font-weight: 600;">تاريخ الاستحقاق</span>
+                                    <span id="gen-sub-due" style="font-weight: bold; color: var(--danger-color);">-</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-muted); font-weight: 600;">مقدار الاشتراك</span>
+                                    <span id="gen-sub-amount" style="font-weight: bold; color: var(--text-main);">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts & Tables -->
+                <div class="dashboard-grid">
+                    <div class="card chart-container">
+                        <div class="card-header">
+                            <h3>تسجيلات الطلاب في الـ 6 أشهر الأخيرة</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="enrollmentChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card recent-activity">
+                        <div class="card-header">
+                            <h3>آخر التسجيلات</h3>
+                            <button class="btn-text" onclick="navigateTo('students')">عرض الكل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>الطالب</th>
+                                            <th>الدورة</th>
+                                            <th>التاريخ</th>
+                                            <th>الحالة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-students-tbody">
+                                        <!-- Data will be injected here via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Students View -->
+            <section id="students" class="page-view">
+                <div class="page-header d-flex justify-between align-center">
+                    <div>
+                        <h2>إدارة الطلاب</h2>
+                        <p>إدارة سجلات الطلاب، التسجيل، والمعلومات الشخصية</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('student-modal')">
+                        <i class='bx bx-plus'></i> إضافة طالب
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-between align-center">
+                        <div class="filter-group">
+                            <select class="form-select">
+                                <option>جميع الدورات</option>
+                                <option>برمجة الويب المتكاملة</option>
+                                <option>تصميم الجرافيك</option>
+                                <option>اللغة الإنجليزية</option>
+                            </select>
+                            <input type="text" placeholder="البحث بالاسم أو الرمز..." class="form-input">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>الاسم الكامل</th>
+                                        <th>الدورة الحالية</th>
+                                        <th>الشعبة</th>
+                                        <th>رقم الطالب</th>
+                                        <th>تاريخ الانضمام</th>
+                                        <th>الرصيد المالي</th>
+                                        <th>الحالة</th>
+                                        <th>إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer pagination-container">
+                        <span>عرض 1 إلى 5 من 1,254</span>
+                        <div class="pagination">
+                            <button class="btn-icon"><i class='bx bx-chevron-right'></i></button>
+                            <button class="btn-icon active">1</button>
+                            <button class="btn-icon">2</button>
+                            <button class="btn-icon">3</button>
+                            <button class="btn-icon"><i class='bx bx-chevron-left'></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instructors View -->
+            <section id="instructors" class="page-view">
+                <div class="page-header d-flex justify-between align-center">
+                    <div>
+                        <h2>هيئة التدريس</h2>
+                        <p>إدارة بيانات المدرسين والمدربين</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('add-instructor-modal')">
+                        <i class='bx bx-plus'></i> إضافة مدرس
+                    </button>
+                </div>
+
+                <div class="filter-bar mb-4">
+                    <input type="text" placeholder="ابحث عن مدرس..." class="form-input full-width">
+                </div>
+
+                <div class="grid-cards" id="instructors-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <section id="courses" class="page-view">
+                <div class="page-header d-flex justify-between align-center">
+                    <div>
+                        <h2>الدورات التدريبية</h2>
+                        <p>تصفح وإدارة الكورسات المتاحة والمقررة</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('add-course-modal')">
+                        <i class='bx bx-plus'></i> دورة جديدة
+                    </button>
+                </div>
+
+                <div class="grid-cards three-cols" id="courses-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Class Management View -->
+            <section id="class-management" class="page-view">
+                <div class="page-header d-flex justify-between align-center">
+                    <div>
+                        <h2>إدارة الشعب</h2>
+                        <p>متابعة الشعب الدراسية وعرض أسمائها وعدد الطلاب المسجلين في كل شعبة</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('add-class-modal')">
+                        <i class='bx bx-plus'></i> إضافة شعبة
+                    </button>
+                </div>
+
+                <div id="class-management-content" style="display: grid; gap: 20px;">
+                    <!-- سيتم تعبئة بيانات الشعب وعدد الطلاب هنا تلقائياً بواسطة JavaScript -->
+                </div>
+            </section>
+
+            <!-- Subjects View -->
+            <section id="subjects" class="page-view">
+                <div class="page-header d-flex justify-between align-center">
+                    <div>
+                        <h2>المواد الدراسية</h2>
+                        <p>إدارة المواد الدراسية الأساسية المتاحة في المعهد</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('add-subject-modal')">
+                        <i class='bx bx-plus'></i> إضافة مادة
+                    </button>
+                </div>
+
+                <div class="filter-bar mb-4">
+                    <input type="text" placeholder="ابحث عن مادة..." class="form-input full-width">
+                </div>
+
+                <div class="grid-cards three-cols" id="subjects-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Accounting View -->
+            <section id="accounting" class="page-view">
+                <div class="page-header d-flex justify-between align-center" style="background: linear-gradient(135deg, var(--bg-color), var(--bg-hover)); padding: 25px; border-radius: 16px; border-right: 6px solid var(--primary-color); margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <div>
+                        <h2 style="margin-bottom: 8px; display: flex; align-items: center; gap: 12px; font-weight: 800;">
+                            <i class='bx bx-wallet-alt' style="color: var(--primary-color); font-size: 32px; background: rgba(79, 70, 229, 0.1); padding: 10px; border-radius: 12px;"></i>
+                            المالية والرسوم
+                        </h2>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 15px; font-weight: 500;">متابعة الإيرادات، المصروفات، والرسوم الدراسية بشكل مفصل</p>
+                    </div>
+                    <div class="d-flex align-center gap-3">
+                        <button class="btn btn-outline" style="border-color: #3b82f6; color: #3b82f6; font-weight: 600; padding: 10px 20px;" onclick="printFinancialReport('weekly')">
+                            <i class='bx bx-bar-chart-alt-2' style="font-size: 18px;"></i> التقرير الأسبوعي
+                        </button>
+                        <button class="btn btn-outline" style="border-color: #10b981; color: #10b981; font-weight: 600; padding: 10px 20px;" onclick="printFinancialReport('monthly')">
+                            <i class='bx bx-line-chart' style="font-size: 18px;"></i> التقرير الشهري
+                        </button>
+                        <button class="btn btn-primary" onclick="openModal('add-accounting-modal')" style="background: linear-gradient(135deg, #4f46e5, #3b82f6); border: none; font-weight: 600; padding: 10px 20px; box-shadow: 0 8px 15px rgba(79, 70, 229, 0.3);">
+                            <i class='bx bx-plus' style="font-size: 20px;"></i> إضافة حركة مالية
+                        </button>
+                    </div>
+                </div>
+
+                <!-- حاوية الإحصائيات الدورية -->
+                <div style="background: var(--surface-color); padding: 25px; border-radius: 20px; margin-bottom: 30px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+                        <div style="background: rgba(59, 130, 246, 0.1); padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class='bx bx-calendar-event' style="font-size: 24px; color: #3b82f6;"></i>
+                        </div>
+                        <h3 style="margin: 0; font-size: 20px; font-weight: 800; color: var(--text-main);">الإحصائيات الدورية</h3>
+                    </div>
+                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+                        <div class="finance-card" style="border-top: 4px solid #3b82f6;">
+                            <div class="finance-icon-wrapper" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                                <i class='bx bx-trending-up'></i>
+                            </div>
+                            <div class="finance-title">إيرادات الأسبوع (7 أيام)</div>
+                            <div class="finance-value" id="acc-weekly-rev" style="color: #3b82f6;">0 دينار</div>
+                        </div>
+                        
+                        <div class="finance-card" style="border-top: 4px solid #ef4444;">
+                            <div class="finance-icon-wrapper" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                                <i class='bx bx-trending-down'></i>
+                            </div>
+                            <div class="finance-title">صرفيات الأسبوع (7 أيام)</div>
+                            <div class="finance-value" id="acc-weekly-exp" style="color: #ef4444;">0 دينار</div>
+                        </div>
+
+                        <div class="finance-card" style="border-top: 4px solid #10b981;">
+                            <div class="finance-icon-wrapper" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                                <i class='bx bx-line-chart'></i>
+                            </div>
+                            <div class="finance-title">إيرادات الشهر (30 يوم)</div>
+                            <div class="finance-value" id="acc-monthly-rev" style="color: #10b981;">0 دينار</div>
+                        </div>
+
+                        <div class="finance-card" style="border-top: 4px solid #f59e0b;">
+                            <div class="finance-icon-wrapper" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                                <i class='bx bx-pie-chart-alt'></i>
+                            </div>
+                            <div class="finance-title">صرفيات الشهر (30 يوم)</div>
+                            <div class="finance-value" id="acc-monthly-exp" style="color: #f59e0b;">0 دينار</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- حاوية الإحصائيات التراكمية -->
+                <div style="background: var(--surface-color); padding: 25px; border-radius: 20px; margin-bottom: 30px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+                        <div style="background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class='bx bx-data' style="font-size: 24px; color: #8b5cf6;"></i>
+                        </div>
+                        <h3 style="margin: 0; font-size: 20px; font-weight: 800; color: var(--text-main);">الإحصائيات التراكمية (الكلية)</h3>
+                    </div>
+                    <div class="stats-grid" style="gap: 20px;">
+                        <div class="finance-card finance-card-gradient" style="background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.5);">
+                            <i class='bx bx-wallet finance-bg-icon'></i>
+                            <div class="finance-icon-wrapper">
+                                <i class='bx bx-credit-card-front'></i>
+                            </div>
+                            <div class="finance-title">إجمالي المستحقات الكلية</div>
+                            <div class="finance-value" id="acc-total-expected">0 دينار</div>
+                        </div>
+                        
+                        <div class="finance-card finance-card-gradient" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.5);">
+                            <i class='bx bx-check-shield finance-bg-icon'></i>
+                            <div class="finance-icon-wrapper">
+                                <i class='bx bx-check-double'></i>
+                            </div>
+                            <div class="finance-title">إجمالي ما تم تحصيله فعلياً</div>
+                            <div class="finance-value" id="acc-total-collected">0 دينار</div>
+                        </div>
+
+                        <div class="finance-card finance-card-gradient" style="background: linear-gradient(135deg, #f43f5e, #e11d48); box-shadow: 0 10px 20px -5px rgba(225, 29, 72, 0.5);">
+                            <i class='bx bx-error-circle finance-bg-icon'></i>
+                            <div class="finance-icon-wrapper">
+                                <i class='bx bx-error'></i>
+                            </div>
+                            <div class="finance-title">إجمالي الديون المتأخرة</div>
+                            <div class="finance-value" id="acc-total-late">0 دينار</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الجداول -->
+                <div class="dashboard-grid mb-4" style="grid-template-columns: 1fr;">
+                    <div class="card" style="border-top: 4px solid #3b82f6; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-radius: 12px; overflow: hidden;">
+                        <div class="card-header d-flex justify-between align-center" style="background: rgba(59, 130, 246, 0.05); border-bottom: 1px solid rgba(59, 130, 246, 0.1); padding: 20px;">
+                            <h3 style="color: #3b82f6; display: flex; align-items: center; gap: 10px; margin: 0; font-weight: 700; font-size: 18px;">
+                                <i class='bx bx-list-ul' style="font-size: 24px; background: white; padding: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"></i> 
+                                سجل الحركات المالية العامة
+                            </h3>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-responsive">
+                                <table class="data-table" style="margin: 0; border-radius: 0;">
+                                    <thead>
+                                        <tr style="background: var(--bg-hover);">
+                                            <th>رقم الإيصال</th>
+                                            <th>الطالب / البيان</th>
+                                            <th>المبلغ</th>
+                                            <th>التاريخ</th>
+                                            <th>وسيلة الدفع</th>
+                                            <th>ملاحظات</th>
+                                            <th>الحالة</th>
+                                            <th>إجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="accounting-table-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-top: 4px solid #10b981; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-radius: 12px; overflow: hidden;">
+                    <div class="card-header d-flex justify-between align-center" style="background: rgba(16, 185, 129, 0.05); border-bottom: 1px solid rgba(16, 185, 129, 0.1); padding: 20px;">
+                        <h3 style="color: #10b981; display: flex; align-items: center; gap: 10px; margin: 0; font-weight: 700; font-size: 18px;">
+                            <i class='bx bx-user-pin' style="font-size: 24px; background: white; padding: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"></i> 
+                            سجل الرسوم الدراسية للطلاب
+                        </h3>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="data-table" style="margin: 0; border-radius: 0;">
+                                <thead>
+                                    <tr style="background: var(--bg-hover);">
+                                        <th>اسم الطالب</th>
+                                        <th>الدورة / الشعبة</th>
+                                        <th>تاريخ التسجيل</th>
+                                        <th>المبلغ الكلي</th>
+                                        <th>المدفوع</th>
+                                        <th>المتبقي</th>
+                                        <th>الحالة</th>
+                                        <th>إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accounting-students-table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="settings" class="page-view">
+                <div class="page-header">
+                    <h2>إعدادات النظام</h2>
+                    <p>التحكم في إعدادات المعهد </p>
+                </div>
+
+                <div class="card max-w-lg">
+                    <div class="card-header">
+                        <h3>الملف الشخصي للمعهد</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="settingsForm">
+                            <div class="form-group">
+                                <label>اسم المعهد</label>
+                                <input type="text" id="settingInstituteName" class="form-input" placeholder="اسم المعهد"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الهاتف</label>
+                                <input type="text" id="settingPhone" class="form-input" placeholder="رقم الهاتف">
+                            </div>
+                            <div class="form-group">
+                                <label>شعار المعهد (PNG فقط)</label>
+                                <input type="file" id="settingLogo" class="form-input" accept="image/png">
+                            </div>
+                            <div class="form-group">
+                                <label>العملة الافتراضية</label>
+                                <select id="settingCurrency" class="form-select">
+                                    <option value="IQD">الدينار العراقي (IQD)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">
+                                <i class='bx bx-save'></i> حفظ التغييرات
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card max-w-lg" style="margin-top: 20px;">
+                    <div class="card-header d-flex align-center gap-2">
+                        <i class='bx bx-data' style="font-size: 20px; color: var(--primary-color);"></i>
+                        <h3>إدارة قاعدة البيانات (النسخة الاحتياطية)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 15px;">بما أن النظام يعمل محلياً، يرجى أخذ نسخة احتياطية من بياناتك بشكل دوري لتجنب فقدانها. يمكنك استعادتها في أي وقت أو نقلها لجهاز آخر.</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="exportDatabase()"><i class='bx bx-download'></i> تحميل نسخة احتياطية</button>
+                            <label class="btn btn-outline" style="cursor: pointer; margin: 0;">
+                                <i class='bx bx-upload'></i> استعادة قاعدة البيانات
+                                <input type="file" id="importDbFile" accept=".json" style="display: none;" onchange="importDatabase(event)">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Roles Management View -->
+            <section id="roles" class="page-view">
+                <div class="page-header d-flex justify-between align-center">
+                    <div>
+                        <h2>إدارة الصلاحيات</h2>
+                        <p>إدارة مستخدمي النظام وتحديد صلاحية الوصول لكل منهم</p>
+                    </div> <button class="btn btn-primary" onclick="openModal('add-role-modal')">
+                        <i class='bx bx-plus'></i> مستخدم جديد
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-between align-center">
+                        <div class="filter-group">
+                            <select class="form-select" id="roles-filter">
+                                <option value="all">جميع الصلاحيات</option>
+                                <option value="admin">مدير النظام</option>
+                                <option value="teacher">المدرس</option>
+                                <option value="parent">ولي الأمر</option>
+                            </select>
+                            <input type="text" id="roles-search" placeholder="البحث بالاسم أو البريد الإلكتروني..."
+                                class="form-input">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>البريد الإلكتروني</th>
+                                        <th>تاريخ الإضافة</th>
+                                        <th>الصلاحية</th>
+                                        <th>تغيير الصلاحية</th>
+                                        <th>إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="roles-table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Teacher Views -->
+            <section id="teacher-dashboard" class="page-view">
+                <div class="page-header">
+                    <h2>لوحة المعلم</h2>
+                    <p>متابعة إحصائياتك وجدولك الأسبوعي بشكل مستقل</p>
+                </div>
+                <div class="stats-grid mb-4">
+                    <div class="stat-card" onclick="navigateTo('teacher-students')" style="cursor: pointer;">
+                        <div class="stat-icon primary"><i class='bx bx-user'></i></div>
+                        <div class="stat-info">
+                            <h3 id="teacher-total-students">0</h3>
+                            <span>إجمالي الطلاب</span>
+                        </div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('teacher-students')" style="cursor: pointer;">
+                        <div class="stat-icon secondary"><i class='bx bx-layer'></i></div>
+                        <div class="stat-info">
+                            <h3 id="teacher-total-classes">0</h3>
+                            <span>عدد الشعب التابعة لك</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid mb-4">
+                    <div class="card">
+                        <div class="card-header d-flex align-center gap-2">
+                            <i class='bx bx-bell text-primary' style="font-size: 20px;"></i>
+                            <h3>آخر الإشعارات</h3>
+                        </div>
+                        <div class="card-body" id="teacher-notifications-list">
+                            <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                                لا توجد إشعارات جديدة
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>تفصيل الشعب التابعة لك</h3>
+                        </div>
+                        <div class="card-body">
+                            <ul id="teacher-classes-list" class="list-group" style="list-style: none; padding: 0; margin: 0;">
+                                <li style="padding: 20px; text-align: center; color: var(--text-muted);">
+                                    لا توجد شعب تابعة لك حالياً
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>الجدول الأسبوعي الخاص بك</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>اليوم</th>
+                                            <th>الحصة الأولى</th>
+                                            <th>الحصة الثانية</th>
+                                            <th>الحصة الثالثة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4"
+                                                style="text-align: center; padding: 20px; color: var(--text-muted);">لا
+                                                يوجد جدول متاح حالياً</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="teacher-students" class="page-view">
+                <div class="page-header">
+                    <h2>الطلاب المسندين إليك</h2>
+                    <p>إدارة درجات وتقييمات طلابك</p>
+                </div>
+                <div class="card">
+                    <div class="card-header d-flex justify-between align-center">
+                        <div class="filter-group">
+                            <select class="form-select" id="teacher-class-filter">
+                                <option value="all">جميع الشعب</option>
+                            </select>
+                            <input type="text" id="teacher-student-search" placeholder="البحث بالاسم..." class="form-input">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم الكامل</th>
+                                        <th>الدورة</th>
+                                        <th>الشعبة</th>
+                                        <th>تاريخ الانضمام</th>
+                                        <th>إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="teacher-students-table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="teacher-attendance" class="page-view">
+                <div class="page-header">
+                    <h2>سجل الحضور والغياب</h2>
+                    <p>إدارة حضور وغياب الطلاب بشكل يومي ومقسم حسب الشعب</p>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-center gap-3" style="flex-wrap: wrap;">
+                        <div class="form-group mb-0" style="flex: 1; min-width: 200px;">
+                            <label>اختر الشعبة</label>
+                            <select id="attendance-page-class-select" class="form-select" onchange="loadClassAttendance()">
+                                <option value="">-- اختر الشعبة --</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0" style="flex: 1; min-width: 200px;">
+                            <label>تاريخ التحضير</label>
+                            <input type="date" id="attendance-page-date" class="form-input" onchange="loadClassAttendance()">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>اسم الطالب</th>
+                                        <th style="text-align: center;">حاضر</th>
+                                        <th style="text-align: center;">غائب</th>
+                                        <th style="text-align: center;">مجاز</th>
+                                        <th>ملاحظات المدرس</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-page-students-list">
+                                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">الرجاء تحديد شعبة أولاً</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4" style="text-align: left;">
+                            <button class="btn btn-primary" onclick="savePageAttendance()">
+                                <i class='bx bx-save'></i> حفظ سجل الحضور
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="teacher-notifications" class="page-view">
+                <div class="page-header">
+                    <h2>إرسال إشعارات للطلاب</h2>
+                    <p>إرسال تنبيهات ورسائل لطلابك في الشعب المحددة</p>
+                </div>
+                <div class="card max-w-lg">
+                    <div class="card-header">
+                        <h3>إشعار جديد</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="teacherNotificationForm">
+                            <div class="form-group">
+                                <label>عنوان الإشعار</label>
+                                <input type="text" id="teacherNotifTitle" class="form-input" placeholder="مثال: موعد اختبار، تغيير موعد المحاضرة..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>اختر الشعبة</label>
+                                <select id="teacherNotifClass" class="form-select" required>
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>نص الإشعار</label>
+                                <textarea id="teacherNotifMessage" class="form-input" rows="4" placeholder="اكتب رسالتك هنا..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">
+                                <i class='bx bx-send'></i> إرسال الإشعار
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Parent Views -->
+            <section id="parent-dashboard" class="page-view">
+                <div class="page-header">
+                    <h2>لوحة ولي الأمر</h2>
+                    <p>أهلاً بك، تابع تقدم أبنائك لدينا.</p>
+                </div>
+                <div class="stats-grid mb-4">
+                    <div class="stat-card" onclick="navigateTo('parent-children')" style="cursor: pointer;">
+                        <div class="stat-icon primary"><i class='bx bx-face'></i></div>
+                        <div class="stat-info">
+                            <h3 id="parent-children-count">0</h3>
+                            <span>عدد الأبناء</span>
+                        </div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('parent-fees')" style="cursor: pointer;">
+                        <div class="stat-icon warning"><i class='bx bx-wallet'></i></div>
+                        <div class="stat-info">
+                            <h3>0 دينار</h3>
+                            <span>رصيد مستحق</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header d-flex align-center gap-2">
+                            <i class='bx bx-bell text-primary' style="font-size: 20px;"></i>
+                            <h3>آخر الإشعارات</h3>
+                        </div>
+                        <div class="card-body" id="parent-notifications-list">
+                            <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                                لا توجد إشعارات جديدة
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header d-flex align-center gap-2">
+                            <i class='bx bx-calendar text-primary' style="font-size: 20px;"></i>
+                            <h3>الجدول الدراسي الأسبوعي (أبنائي)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>اليوم</th>
+                                            <th>الابن الأول (أحمد)</th>
+                                            <th>الابن الثاني (سارة)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3"
+                                                style="text-align: center; padding: 20px; color: var(--text-muted);">لا
+                                                توجد جداول متاحة حالياً</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="parent-children" class="page-view">
+                <div class="page-header">
+                    <h2>أبنائي</h2>
+                    <p>التقييمات الأكاديمية ونسبة الحضور</p>
+                </div>
+                <div id="parent-children-list">
+                    <div class="card">
+                        <div class="card-body" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            <i class='bx bx-face'
+                                style="font-size: 48px; color: var(--primary-color); margin-bottom: 15px;"></i>
+                            <h3>سجل الأبناء الأكاديمي</h3>
+                            <p>لا توجد بيانات متاحة حالياً للعرض.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="parent-fees" class="page-view">
+                <div class="page-header">
+                    <h2>الرسوم المالية</h2>
+                    <p>الفواتير والدفعات السابقة</p>
+                </div>
+                <div class="card">
+                    <div class="card-body" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class='bx bx-wallet'
+                            style="font-size: 48px; color: var(--primary-color); margin-bottom: 15px;"></i>
+                        <h3>لا توجد فواتير أو رسوم مسجلة حالياً</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Accountant Views -->
+            <section id="accountant-dashboard" class="page-view">
+                <div class="page-header">
+                    <h2>لوحة المحاسب</h2>
+                    <p>متابعة الإيرادات والمصروفات المالية للمعهد</p>
+                </div>
+                <div class="stats-grid mb-4">
+                    <div class="stat-card" style="cursor: pointer;">
+                        <div class="stat-icon primary"><i class='bx bx-money'></i></div>
+                        <div class="stat-info">
+                            <h3 id="acc-total-income">0 دينار</h3>
+                            <span>إجمالي الإيرادات</span>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="cursor: pointer;">
+                        <div class="stat-icon warning"><i class='bx bx-wallet'></i></div>
+                        <div class="stat-info">
+                            <h3 id="acc-total-pending">0 دينار</h3>
+                            <span>الرسوم المستحقة غير المحصلة</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="accountant-fees" class="page-view">
+                <div class="page-header">
+                    <h2>إدارة الرسوم</h2>
+                    <p>متابعة التحصيلات ومدفوعات الطلاب</p>
+                </div>
+                <div class="card">
+                    <div class="card-body" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class='bx bx-receipt'
+                            style="font-size: 48px; color: var(--primary-color); margin-bottom: 15px;"></i>
+                        <h3>سجل التحصيلات المالية</h3>
+                        <p>استخدم هذا القسم لإضافة إيصالات دفع للطلاب ومتابعة الأرصدة.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="accountant-reports" class="page-view">
+                <div class="page-header">
+                    <h2>التقارير المالية</h2>
+                    <p>تقارير تفصيلية عن الحركة المالية</p>
+                </div>
+                <div class="card">
+                    <div class="card-body" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class='bx bx-line-chart'
+                            style="font-size: 48px; color: var(--primary-color); margin-bottom: 15px;"></i>
+                        <h3>لوحة التقارير قيد التطوير</h3>
+                        <p>قريباً ستتمكن من استخراج تقارير مالية يومية وشهرية وسنوية بالتفصيل.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications View -->
+
+            <section id="notifications" class="page-view">
+                <div class="page-header">
+                    <h2>نظام الإشعارات</h2>
+                    <p>إرسال التعميمات والتنبيهات لمستخدمي النظام</p>
+                </div>
+
+                <div class="card max-w-lg">
+                    <div class="card-header">
+                        <h3>إرسال إشعار جديد</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="notificationForm">
+                            <div class="form-group">
+                                <label>عنوان الإشعار</label>
+                                <input type="text" id="notifTitle" class="form-input"
+                                    placeholder="مثال: موعد اختبارات الفصل" required>
+                            </div>
+                            <div class="form-group">
+                                <label>الفئة المستهدفة</label>
+                                <select id="notifTarget" class="form-select" required>
+                                    <option value="الجميع">الجميع</option>
+                                    <option value="الطلاب">الطلاب فقط</option>
+                                    <option value="المدرسين">المدرسين فقط</option>
+                                    <option value="شعبة محددة">شعبة محددة</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="notifClassGroup" style="display: none;">
+                                <label>الشعبة المستهدفة</label>
+                                <select id="notifClass" class="form-select">
+                                    <option value="">-- حدد الشعبة --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>نص الإشعار</label>
+                                <textarea id="notifMessage" class="form-input" rows="4" placeholder="اكتب رسالتك هنا..."
+                                    required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">
+                                <i class='bx bx-send'></i> إرسال الإشعار
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Add Student Modal -->
+    <div class="modal-overlay" id="student-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إضافة طالب جديد</h3>
+                <button class="close-modal" onclick="closeModal('student-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="addStudentForm">
+                    <div class="form-group">
+                        <label>الاسم الثلاثي</label>
+                        <input type="text" id="studentFullName" class="form-input" placeholder="مثال: أحمد محمد علي"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="studentEmail" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الدورة المراد التسجيل بها (يمكن اختيار أكثر من دورة)</label>
+                        <select id="studentCourse" class="form-select" multiple required style="height: 100px;">
+                            <!-- Populated dynamically via JS -->
+                        </select>
+                        <small style="color: var(--text-muted); font-size: 12px; margin-top: 5px; display: block;">اضغط
+                            على Ctrl (أو Cmd) لاختيار أكثر من دورة.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الشعبة (اختياري)</label>
+                        <select id="studentClass" class="form-select">
+                            <option value="">-- حدد الشعبة --</option>
+                        </select>
+                        <div id="class-students-info" style="margin-top: 10px;"></div>
+                    </div>
+
+                    <h4
+                        style="margin: 15px 0 10px; color: var(--text-main); font-size: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">
+                        البيانات المالية</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>المبلغ الكلي</label>
+                            <input type="number" id="studentTotalAmount" class="form-input" min="0" required
+                                oninput="calculateRemaining()">
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ الواصل</label>
+                            <input type="number" id="studentPaidAmount" class="form-input" min="0" value="0" required
+                                oninput="calculateRemaining()">
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ المتبقي</label>
+                            <input type="number" id="studentRemainingAmount" class="form-input" readonly
+                                style="background-color: var(--bg-body);">
+                        </div>
+                    </div>
+
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2"
+                            onclick="closeModal('student-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ التسجيل</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Class Modal -->
+    <div class="modal-overlay" id="add-class-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إضافة شعبة جديدة</h3>
+                <button class="close-modal" onclick="closeModal('add-class-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="addClassForm">
+                    <div class="form-group">
+                        <label>اسم الشعبة</label>
+                        <input type="text" id="className" class="form-input" placeholder="مثال: شعبة أ" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المادة الدراسية المرتبطة</label>
+                        <select id="classSubject" class="form-select" required>
+                            <!-- سيتم تعبئة هذه القائمة ديناميكياً بواسطة JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>سعة الشعبة (عدد الطلاب)</label>
+                        <input type="number" id="classCapacity" class="form-input" min="1" placeholder="مثال: 30" required>
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2" onclick="closeModal('add-class-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ الشعبة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Class Modal -->
+    <div class="modal-overlay" id="edit-class-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>تعديل الشعبة</h3>
+                <button class="close-modal" onclick="closeModal('edit-class-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="editClassForm">
+                    <input type="hidden" id="editClassId">
+                    <div class="form-group">
+                        <label>اسم الشعبة</label>
+                        <input type="text" id="editClassName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المادة الدراسية المرتبطة</label>
+                        <select id="editClassSubject" class="form-select" required>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>سعة الشعبة (عدد الطلاب)</label>
+                        <input type="number" id="editClassCapacity" class="form-input" min="1" required>
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2" onclick="closeModal('edit-class-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div class="modal-overlay" id="edit-student-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>تعديل بيانات الطالب</h3>
+                <button class="close-modal" onclick="closeModal('edit-student-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="editStudentForm">
+                    <input type="hidden" id="editStudentId">
+                    <div class="form-group">
+                        <label>الاسم الثلاثي</label>
+                        <input type="text" id="editStudentFullName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="editStudentEmail" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الدورة المراد التسجيل بها</label>
+                        <select id="editStudentCourse" class="form-select" multiple required style="height: 100px;">
+                            <!-- Populated dynamically via JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>الشعبة (اختياري)</label>
+                        <select id="editStudentClass" class="form-select">
+                            <option value="">-- حدد الشعبة --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الطالب في الشعبة</label>
+                        <input type="text" id="editStudentSerial" class="form-input" readonly style="background-color: var(--bg-body);" placeholder="-">
+                    </div>
+
+                    <h4
+                        style="margin: 15px 0 10px; color: var(--text-main); font-size: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">
+                        البيانات المالية</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>المبلغ الكلي</label>
+                            <input type="number" id="editStudentTotalAmount" class="form-input" min="0" required
+                                oninput="calculateEditRemaining()">
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ الواصل</label>
+                            <input type="number" id="editStudentPaidAmount" class="form-input" min="0" required
+                                oninput="calculateEditRemaining()">
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ المتبقي</label>
+                            <input type="number" id="editStudentRemainingAmount" class="form-input" readonly
+                                style="background-color: var(--bg-body);">
+                        </div>
+                    </div>
+
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2"
+                            onclick="closeModal('edit-student-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Role Modal -->
+    <div class="modal-overlay" id="add-role-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إضافة مستخدم جديد</h3>
+                <button class="close-modal" onclick="closeModal('add-role-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="addRoleForm">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" id="newRoleName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="newRoleEmail" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الرمز (كلمة المرور)</label>
+                        <input type="text" id="newRolePassword" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الصلاحية</label>
+                        <select id="newRoleType" class="form-select" required onchange="toggleRoleFields()">
+                            <option value="">-- حدد الصلاحية --</option>
+                            <option value="admin">مدير النظام</option>
+                            <option value="teacher">مدرس</option>
+                            <option value="parent">ولي أمر</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="roleSubjectGroup" style="display: none;">
+                        <label>المادة الدراسية (للمدرس)</label>
+                        <select id="newRoleSubject" class="form-select" onchange="filterClassesForRole()">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group" id="roleClassGroup" style="display: none;">
+                        <label>الشعب (للمدرس)</label>
+                        <select id="newRoleClass" class="form-select" multiple style="height: 100px;">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <small style="color: var(--text-muted); font-size: 12px; margin-top: 5px; display: block;">اضغط على Ctrl (أو Cmd) لاختيار أكثر من شعبة لربطها بالمعلم.</small>
+                    </div>
+                    <div class="form-group" id="roleStudentGroup" style="display: none;">
+                        <label>الطالب المرتبط (لولي الأمر)</label>
+                        <select id="newRoleStudent" class="form-select" multiple style="height: 100px;">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <small style="color: var(--text-muted); font-size: 12px; margin-top: 5px; display: block;">اضغط على Ctrl (أو Cmd) لاختيار أكثر من طالب. سيتم ربطهم ببريد ولي الأمر ليعرضوا في لوحته تلقائياً.</small>
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2"
+                            onclick="closeModal('add-role-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Role Modal -->
+    <div class="modal-overlay" id="edit-role-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>تعديل بيانات المستخدم</h3>
+                <button class="close-modal" onclick="closeModal('edit-role-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="editRoleForm">
+                    <input type="hidden" id="editRoleOriginalEmail">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" id="editRoleName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="editRoleEmail" class="form-input" required readonly style="background-color: var(--bg-body); cursor: not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label>الرمز (كلمة المرور)</label>
+                        <input type="text" id="editRolePassword" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الصلاحية</label>
+                        <select id="editRoleType" class="form-select" required onchange="toggleEditRoleFields()">
+                            <option value="admin">مدير النظام</option>
+                            <option value="teacher">مدرس</option>
+                            <option value="parent">ولي أمر</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="editRoleSubjectGroup" style="display: none;">
+                        <label>المادة الدراسية (للمدرس)</label>
+                        <select id="editRoleSubject" class="form-select" onchange="filterClassesForEditRole()">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group" id="editRoleClassGroup" style="display: none;">
+                        <label>الشعب (للمدرس)</label>
+                        <select id="editRoleClass" class="form-select" multiple style="height: 100px;">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <small style="color: var(--text-muted); font-size: 12px; margin-top: 5px; display: block;">اضغط على Ctrl (أو Cmd) لاختيار أكثر من شعبة لربطها بالمعلم.</small>
+                    </div>
+                    <div class="form-group" id="editRoleStudentGroup" style="display: none;">
+                        <label>الطالب المرتبط (لولي الأمر)</label>
+                        <select id="editRoleStudent" class="form-select" multiple style="height: 100px;">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <small style="color: var(--text-muted); font-size: 12px; margin-top: 5px; display: block;">اضغط على Ctrl (أو Cmd) لاختيار أكثر من طالب. سيتم ربطهم ببريد ولي الأمر ليعرضوا في لوحته تلقائياً.</small>
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2" onclick="closeModal('edit-role-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Instructor Modal -->
+    <div class="modal-overlay" id="add-instructor-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إضافة مدرس جديد</h3>
+                <button class="close-modal" onclick="closeModal('add-instructor-modal')"><i
+                        class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="addInstructorForm">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" id="instructorName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المادة الدراسية الاختصاص (التخصص)</label>
+                        <select id="instructorSubject" class="form-select" required>
+                            <!-- Populated dynamically via JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="text" id="instructorPhone" class="form-input" placeholder="مثال: 07800000000"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label>الصورة الشخصية (اختياري - بصيغة JPG)</label>
+                        <input type="file" id="instructorImg" class="form-input" accept=".jpg, .jpeg">
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2"
+                            onclick="closeModal('add-instructor-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ الإضافة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Instructor Modal -->
+    <div class="modal-overlay" id="edit-instructor-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>تعديل بيانات المدرس</h3>
+                <button class="close-modal" onclick="closeModal('edit-instructor-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="editInstructorForm">
+                    <input type="hidden" id="editInstructorId">
+                    
+                    <div class="form-group">
+                        <label>اسم المدرس</label>
+                        <input type="text" id="editInstructorName" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>التخصص / المادة</label>
+                        <select id="editInstructorSubject" class="form-select" required></select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="text" id="editInstructorPhone" class="form-input" required>
+                    </div>
+                    
+                    <div class="d-flex justify-between mt-4">
+                        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                        <button type="button" class="btn btn-outline" onclick="closeModal('edit-instructor-modal')">إلغاء</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Course Modal -->
+    <div class="modal-overlay" id="add-course-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إضافة دورة جديدة</h3>
+                <button class="close-modal" onclick="closeModal('add-course-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCourseForm">
+                    <div class="form-group">
+                        <label>عنوان الدورة</label>
+                        <input type="text" id="courseTitle" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المادة الدراسية</label>
+                        <select id="courseSubject" class="form-select" required onchange="filterInstructorsForCourse()">
+                            <!-- Populated dynamically via JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المدرس المسؤول</label>
+                        <select id="courseInstructor" class="form-select" required>
+                            <option value="">-- حدد المدرس --</option>
+                        </select>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>المدة</label>
+                            <input type="text" id="courseDuration" class="form-input" placeholder="مثال: 8 أسابيع"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>صورة الغلاف (يرجى رفع ملف صورة)</label>
+                        <input type="file" id="courseImg" class="form-input" accept="image/*" required>
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2"
+                            onclick="closeModal('add-course-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ الدورة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Course Modal -->
+    <div class="modal-overlay" id="edit-course-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>تعديل بيانات الدورة</h3>
+                <button class="close-modal" onclick="closeModal('edit-course-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCourseForm">
+                    <input type="hidden" id="editCourseId">
+                    <div class="form-group">
+                        <label>عنوان الدورة</label>
+                        <input type="text" id="editCourseTitle" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المادة الدراسية</label>
+                        <select id="editCourseSubject" class="form-select" required onchange="filterInstructorsForEditCourse()">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المدرس المسؤول</label>
+                        <select id="editCourseInstructor" class="form-select" required>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>المدة</label>
+                            <input type="text" id="editCourseDuration" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>تغيير صورة الغلاف (اختياري)</label>
+                        <input type="file" id="editCourseImg" class="form-input" accept="image/*">
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2" onclick="closeModal('edit-course-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div class="modal-overlay" id="add-subject-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إضافة مادة دراسية</h3>
+                <button class="close-modal" onclick="closeModal('add-subject-modal')"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="addSubjectForm">
+                    <div class="form-group">
+                        <label>اسم المادة</label>
+                        <input type="text" id="subjectName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>وصف المادة</label>
+                        <textarea id="subjectDesc" class="form-input" rows="3" required></textarea>
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2"
+                            onclick="closeModal('add-subject-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ المادة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Accounting Modal -->
+    <div class="modal-overlay" id="add-accounting-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إضافة حركة مالية</h3>
+                <button class="close-modal" onclick="closeModal('add-accounting-modal')"><i
+                        class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="addAccountingForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>رقم الإيصال</label>
+                            <input type="text" id="accReceipt" class="form-input" placeholder="INV-000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>نوع الحركة</label>
+                            <select id="accType" class="form-select" required>
+                                <option value="income">إيراد (+)</option>
+                                <option value="expense">مصروف (-)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label>البيان / الطلب</label>
+                        <select id="accStudentSelect" class="form-select" onchange="const inp = document.getElementById('accStudent'); if(this.value === 'اخرى') { inp.style.display = 'block'; inp.value = ''; inp.focus(); } else { inp.style.display = 'none'; inp.value = this.value; }" required>
+                            <option value="">-- حدد الطلب --</option>
+                            <option value="اشتراك الانترنت">اشتراك الانترنت</option>
+                            <option value="اشتراك المولد">اشتراك المولد</option>
+                            <option value="اخرى">اخرى (طالب أو غيره)</option>
+                        </select>
+                        <input type="text" id="accStudent" class="form-input" placeholder="اكتب اسم الطلب أو الطالب هنا..." style="display: none; margin-top: 10px;" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>المبلغ المدفوع</label>
+                            <input type="text" id="accAmount" class="form-input" placeholder="مثال: 500,000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>وسيلة الدفع</label>
+                            <input type="text" id="accMethod" class="form-input" value="نقدي" readonly style="background-color: var(--bg-body); cursor: not-allowed;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>تاريخ السداد</label>
+                        <input type="text" id="accDate" class="form-input" placeholder="مثال: 01 يوليوز 2026" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <select id="accStatus" class="form-select" required>
+                            <option value="active">مدفوع</option>
+                            <option value="pending">مدفوع جزئي</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>ملاحظات</label>
+                        <input type="text" id="accNotes" class="form-input" placeholder="أضف ملاحظات (اختياري)...">
+                    </div>
+                    <div class="form-action flex-end mt-4">
+                        <button type="button" class="btn btn-outline ml-2"
+                            onclick="closeModal('add-accounting-modal')">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ السجل</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Print Receipt Container (A5 Landscape Highly Designed) -->
+    <div id="receipt-print-container">
+
+        <!-- Premium Header -->
+        <div class="receipt-header-premium">
+            <div class="receipt-header-left">
+                <img id="receipt-logo-img" src="logo.png"
+                    onerror="this.src='https://via.placeholder.com/80?text=Logo'" alt="شعار المعهد"
+                    class="receipt-logo">
+            </div>
+            <div class="receipt-header-center">
+                <h1 id="receipt-institute-name">مركز الباندا للتدريب والتطوير</h1>
+                <h2 class="receipt-title-box">وصل قبض مالي <br> <span style="font-size: 14px;">Official Receipt
+                        Voucher</span></h2>
+            </div>
+            <div class="receipt-header-right">
+                <div class="contact-info">
+                    <p><i class='bx bxs-phone'></i> 07800000000</p>
+                    <p><i class='bx bxs-envelope'></i> info@panda-center.com</p>
+                    <p><i class='bx bxs-map'></i> بغداد - المنصور</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Line -->
+        <div class="receipt-divider">
+            <div class="divider-line"></div>
+            <div class="divider-icon"><i class='bx bx-check-shield'></i></div>
+            <div class="divider-line"></div>
+        </div>
+
+        <!-- Receipt Body details -->
+        <div class="receipt-body-premium">
+            <!-- Info Box: Student details -->
+            <div class="receipt-info-grid">
+                <div class="info-group">
+                    <label>رقم الوصل | <span class="en-label">Receipt No</span></label>
+                    <div class="info-value receipt-number" id="print-student-id">INV-0000</div>
+                </div>
+                <div class="info-group">
+                    <label>التاريخ | <span class="en-label">Date</span></label>
+                    <div class="info-value" id="print-date">01-01-2026</div>
+                </div>
+                <div class="info-group full-width">
+                    <label>استلمنا من السيد(ة) | <span class="en-label">Received From</span></label>
+                    <div class="info-value highlight-value" id="print-student-name">اسم الطالب هنا</div>
+                </div>
+                <div class="info-group full-width">
+                    <label>وذلك عن دورة | <span class="en-label">For Course</span></label>
+                    <div class="info-value highlight-value" id="print-student-course">اسم الدورة هنا</div>
+                </div>
+                <div class="info-group">
+                    <label>الشعبة | <span class="en-label">Class</span></label>
+                    <div class="info-value" id="print-student-class">غير محدد</div>
+                </div>
+                <div class="info-group">
+                    <label>رقم الطالب | <span class="en-label">Student No.</span></label>
+                    <div class="info-value" id="print-student-serial">-</div>
+                </div>
+            </div>
+
+            <!-- Financial Details Box -->
+            <div class="financial-box-premium">
+                <div class="fin-header">التفاصيل المالية | Financial Details</div>
+                <div class="fin-grid">
+                    <div class="fin-item">
+                        <span class="fin-label">المبلغ المقدر كلياً <br> <small>Total Course Fee</small></span>
+                        <strong class="fin-value" id="print-total-amount">0</strong>
+                    </div>
+                    <div class="fin-item active-payment">
+                        <span class="fin-label">المبلغ المدفوع الان <br> <small>Amount Paid Now</small></span>
+                        <strong class="fin-value amount-paid" id="print-paid-amount">0</strong>
+                    </div>
+                    <div class="fin-item">
+                        <span class="fin-label">المبلغ المتبقي <br> <small>Remaining Balance</small></span>
+                        <strong class="fin-value amount-remaining" id="print-remaining-amount">0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Receipt Footer -->
+        <div class="receipt-footer-premium">
+            <div class="sig-box">
+                <p>توقيع وختم المستلم <br> <small>Receiver's Sign & Stamp</small></p>
+                <div class="signature-line"></div>
+            </div>
+
+            <div class="qr-placeholder">
+                <i class='bx bx-qr-scan'></i>
+                <span>مسح للتحقق</span>
+            </div>
+
+            <div class="sig-box">
+                <p>توقيع الطالب <br> <small>Student's Signature</small></p>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="receipt-note">
+            <p>· نشكر لكم ثقتكم بانضمامكم لمركز الباندا · تحفظ هذه النسخة الأصلية لدى الطالب · لا يعتد بهذا الوصل بدون
+                ختم مالي ·</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js?v=2"></script>
+</body>
+
+</html>
